@@ -20,9 +20,10 @@ class Investor < ActiveRecord::Base
     private
     def execute_transaction(tckr, quantity, is_purchase)
 
-        company = Company.find_by(ticker: tckr)
+        company = Company.find_by(ticker: tckr.upcase)
         today = Time.now
-
-
+        binding.pry
+        x = Transaction.find_or_create_by(investor_id: self.id, company_id: company.id, transaction_date: today, price: company.current_price, quantity: quantity, is_purchase?: is_purchase)
+        x.save
     end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200505182841) do
+ActiveRecord::Schema.define(version: 20200505204915) do
 
   create_table "brokers", force: :cascade do |t|
     t.string "first_name"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 20200505182841) do
     t.string  "username"
     t.string  "password"
     t.integer "broker_id"
+    t.float   "account_cash"
   end
 
   create_table "transactions", force: :cascade do |t|

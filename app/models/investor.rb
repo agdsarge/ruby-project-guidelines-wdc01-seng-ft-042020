@@ -8,4 +8,21 @@ class Investor < ActiveRecord::Base
         "Your friendly trader is #{br_full_name}.\nTheir phone number is #{self.broker.telephone}.\n Their email address is #{self.broker.email}."
     end
 
+    def buy_stock(tckr, quantity)
+        #check_funds
+        execute_transaction(tckr, quantity, true)
+    end
+
+    def sell_stock(tckr, quantity)
+        execute_transaction(tckr, quantity, false)
+    end
+
+    private
+    def execute_transaction(tckr, quantity, is_purchase)
+
+        company = Company.find_by(ticker: tckr)
+        today = Time.now
+
+
+    end
 end

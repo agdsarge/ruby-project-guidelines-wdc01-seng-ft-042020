@@ -47,8 +47,8 @@ For a typical investor,
 Seed a price for yesterday to
 TODO TODAY:
     Seed prices
-    Yesterday close
-    Build at models. Prioritize the client transaction company model first.
+
+    Build out models. Prioritize the client transaction company model first.
     Github
 
 

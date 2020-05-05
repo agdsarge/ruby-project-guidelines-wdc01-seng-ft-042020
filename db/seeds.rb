@@ -32,6 +32,8 @@ agds = Investor.find_or_create_by(first_name: "Davis", last_name: "Sargeant", us
 
 epb.broker_id = gb.id
 agds.broker_id = gb.id
+epb.save
+agds.save
 
 bud = Company.find_or_create_by(ticker: "BUD", name: "Anheuser-Busch InBev SA/NV", current_price: 41.69)
 mrk = Company.find_or_create_by(ticker: "MRK", name: "Merck & Co., Inc.", current_price: 78.70)

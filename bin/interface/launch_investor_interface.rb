@@ -44,7 +44,7 @@ def withdraw_method(invstr)
     gets
 end
 
-def direct_broker(invstr)
+def direct_broker(invstr) #direct broker to action
     puts "\n\n\n\n\n\n"
     print "          Would you like to buy or sell today?:  "
     cmd = gets.chomp
@@ -85,10 +85,10 @@ def launch_investor_interface(invstr)
         input = gets.chomp
 
         case input
-        when "help" || "h"
+        when "help" || "h" #help
             puts ""
             investor_help
-        when "q" || "quit"
+        when "q" || "quit"   #logout
             logout
             break
         when "quote" #print a position of a single equity that i own
@@ -96,16 +96,16 @@ def launch_investor_interface(invstr)
             tckr = gets.chomp
             quote(invstr, tckr)
 
-        when "portfolio"
+        when "portfolio" #print all positions
             portfolio_method(invstr)
 
-        when "deposit"
+        when "deposit"  #deposit (monopoly money!)
             deposit_method
-        when "withdraw" || "get money"
+        when "withdraw" || "get money"  # withdraw (sad times!)
             withdraw_method
-        when "broker" || "b"
+        when "broker" || "b"   #broker inquiry
             display_broker_info(invstr)
-        when "trade"
+        when "trade" #direct broker to action
             direct_broker
         else
             puts "          I don't recognize that command!"
@@ -117,18 +117,5 @@ def launch_investor_interface(invstr)
 
 
     end
-
-    # command_hash = {"help" => investor_help, "h" => investor_help, "q" => logout}
-    # command_hash[input]
-
-
-    #help
-    #logout
-    #print a position of a single equity that i own
-    #print all positions
-    #deposit and withdraw (monopoly money!)
-    #broker inquiry
-    #direct broker to action
-
 
 end

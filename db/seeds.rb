@@ -23,3 +23,16 @@ sb = Company.find_or_create_by(ticker: "SBUX", name: "Starbucks Corporation", cu
 wf = Company.find_or_create_by(ticker: "WFC", name: "Wells Fargo & Company", current_price: 26.65)
 mmm = Company.find_or_create_by(ticker: "MMM", name:"3M Company", current_price: 148.50)
 aapl = Company.find_or_create_by(ticker: "AAPL", name: "Apple Inc.", current_price: 300.80)
+
+epb.buy_stock("aapl", 10)
+epb.buy_stock("aapl", 20)
+epb.sell_stock("aapl", 5)
+epb.buy_stock("aapl", 2)
+epb.buy_stock("mmm", 20)
+
+
+agds.buy_stock("cmg", 10)
+agds.buy_stock("jnj", 20)
+agds.sell_stock("jnj", 5)
+agds.buy_stock("voo", 2)
+agds.buy_stock("sbux", 20)

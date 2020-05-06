@@ -22,20 +22,39 @@ class Investor < ActiveRecord::Base
         tr_arr = Transaction.where("investor_id = ? AND company_id = ?", self.id, co.id)
 
         #TODO make posit valid we want output in this hash format.
+        output = {ticker: tckr, shares: 0, total_value: 0.0 }
 
-        posit = tr_arr.reduce({ticker: tckr.upcase, shares: 0, total_value: 0}) do |memo, transaction|
-            binding.pry
-            #transaction.is_purchase? ? memo[:shares] += transaction.quantity : memo[:shares] -= transaction.quantity
-            #memo[:shares] += (transaction.is_purchase? ? (transaction.quantity) : (-1 * transaction.quantity))
-            #memo[:total_value] += (transaction.is_purchase? ? (transaction.quantity * transaction.price) : (-1 * transaction.quantity * transaction.price))
+        tr_arr.each do |trans|
+            puts trans
+            if trans.is_purchase?
+                output[:shares] += trans.quantity
+                output[:total_value] += trans.quantity * trans.price
+            else
+                output[:shares] -= trans.quantity
+                output[:total_value] -= trans.quantity * trans.price
+            end
+
         end
-        #output hash {ticker: tckr, shares: INT, total_value: FLT }
-        posit
+
+        # posit = tr_arr.reduce({ticker: tckr.upcase, shares: 0, total_value: 0}) do |memo, transaction|
+        #     binding.pry
+        #     transaction.is_purchase? ? memo[:shares] += transaction.quantity : memo[:shares] -= transaction.quantity
+        #     memo[:shares] += (transaction.is_purchase? ? (transaction.quantity) : (-1 * transaction.quantity))
+        #     memo[:total_value] += (transaction.is_purchase? ? (transaction.quantity * transaction.price) : (-1 * transaction.quantity * transaction.price))
+        # end
+        # output hash {ticker: tckr, shares: INT, total_value: FLT }
+        # posit
+        output
     end
 
     def all_positions
         #call stock_positions
-
+        tr_arr = Transaction.where("investor_id = ?", self.id)
+    
+        return_arr = tr_arr.map do |trans|
+            co = Company.find(trans.company_id)
+            self.stock_position(co.ticker)
+        end.uniq
 
         #output #=> ##array of hashes [{ticker: AAPL, shares: 3, total_value: 30}, {ticker: MMM, shares: 90, total_value: 9000}
 

@@ -2,13 +2,13 @@ class Broker < ActiveRecord::Base
     has_many :investors
 
     # Class Methods
-    
+
     def self.pets_clients
         self.all.map {|brkr| brkr.investors}
     end
 
 
-    #Istance Methods
+    #Instance Methods
 
     #class method all brokers all clients. assigns to self
     def create_new_client(fname, lname, uname, pword, cash)
@@ -23,7 +23,16 @@ class Broker < ActiveRecord::Base
         # Desired Output  [{client_id => [] } {client_id => []}]
     end
 
+    def get_client_portfolio(client_id)
+
+    end
+
+    def get_investors_by_first_name(fname)
+        fname.capitalize!
+        my_guys = self.investors.select {|inv| inv.first_name == fname}
+        my_guys.map {|inv| [inv.first_name, inv.last_name, inv.id]}
+        #return [fname, lname, investor_id]
+    end
 
 
-    
 end

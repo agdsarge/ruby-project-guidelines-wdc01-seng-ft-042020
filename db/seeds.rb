@@ -4,14 +4,25 @@ Transaction.destroy_all
 Company.destroy_all
 
 gb = Broker.find_or_create_by(first_name: "George", last_name: "Banks", username: "gbanks", password: "poppins", email: "gbanks@pets.com", telephone: "777-555-7654")
+burns = Broker.find_or_create_by(first_name: "Montgomery", last_name: "Burns", username: "mtburns", password: "springfield", email: "mtburns@pets.com", telephone: "818-404-9009")
+
 
 epb = Investor.find_or_create_by(first_name: "Enrique", last_name: "Pittaluga", username: "epittab", password: "hunter2")
 agds = Investor.find_or_create_by(first_name: "Davis", last_name: "Sargeant", username: "agdsarge", password: "30rock")
+jfk = Investor.find_or_create_by(first_name: "Jack", last_name: "Kennedy", username: "jfk", password: "bay_of_pigs")
+jma = Investor.find_or_create_by(first_name: "Jack", last_name: "Ma", username: "jma", password: "alibaba")
+
+
+jfk.broker_id = burns.id
+jma.broker_id = burns.id
 
 epb.broker_id = gb.id
 agds.broker_id = gb.id
 epb.save
 agds.save
+jfk.save
+jma.save
+
 
 bud = Company.find_or_create_by(ticker: "BUD", name: "Anheuser-Busch InBev SA/NV", current_price: 41.69)
 mrk = Company.find_or_create_by(ticker: "MRK", name: "Merck & Co., Inc.", current_price: 78.70)

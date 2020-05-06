@@ -9,7 +9,7 @@ require_relative './interface/launch_investor_interface.rb'
 #reference topmargin = "\n\n\n\n\n\n"
 
 def menu_select(user)
-    user.class == Investor ? launch_investor_interface : launch_broker_interface
+    user.class == Investor ? launch_investor_interface(user) : launch_broker_interface(user)
 end
 
 def run

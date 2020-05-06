@@ -24,7 +24,7 @@ def login
     password = gets.chomp
     puts "\n\n"
     x = validate_pair(username, password)
-    puts "           It's good to see you again, #{x.first_name}"
+    puts "          It's good to see you again, #{x.first_name}"
     puts "\n\n"
     gets
     return x

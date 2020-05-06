@@ -1,19 +1,54 @@
 
 
 def investor_help
-    puts "anything"
+    system("clear")
+    puts "\n\n\n\n\n\n"
+    puts "          quit"   
+    puts "            - this command will logout a user."
+    puts "\n"
+    puts "          quote" # that i own
+    puts "            - this command will print a position of a single equity."
+    puts "            * require a company's ticker"
+    puts "\n"
+    puts "          portfolio" #print all positions
+    puts "            - this command will print all positions."
+    puts "\n"
+    puts "          deposit"  #deposit (monopoly money!)
+    puts "            - this command will allow you to deposit money."
+    puts "            * require an amount to deposit."
+    puts "\n" 
+    puts "          withdraw"  # withdraw (sad times!)
+    puts "            - this command will allow you to withdraw money."
+    puts "            * require an amount to withdraw."
+    puts "\n" 
+    puts "          broker"   #broker inquiry
+    puts "            - this command will allow you to see your broker's contact information."
+    puts "\n" 
+    puts "          trade" #direct broker to action
+    puts "            - this command will allow you to request your broker's assistance to buy and sell shares."
+    puts "\n" 
     gets
 
 end
 
 def logout
-    puts "goodbye!"
+    system("clear")
+    puts "\n\n\n\n\n\n"
+    puts "          Goodbye!"
     gets
 
 end
 
 def quote(invstr, tckr)
-    invstr.stock_position(tckr)
+    stock_hash = invstr.stock_position(tckr)
+    total_two_digits = stock_hash[:total_value]
+     
+    
+    puts "\n\n\n"
+    puts "          Here is your position for #{stock_hash[:ticker].upcase}."
+    puts "          You hold #{stock_hash[:shares]} shares."
+    puts "          The current market value of your shares is $#{'%.2f' %total_two_digits}"
+
     gets
 end
 
@@ -24,7 +59,13 @@ def portfolio_method(invstr)
 end
 
 def display_broker_info(invstr)
-    puts invstr.get_broker_contact
+    arr = invstr.get_broker_contact
+
+    puts "\n\n\n\n\n\n"
+    puts "          Your friendly broker is: #{arr[0]}"
+    puts "          Their telephone number is: #{arr[1]}"
+    puts "          Their email address is: #{arr[2]}"
+    
     gets
 end
 
@@ -67,9 +108,9 @@ def direct_broker(invstr) #direct broker to action
         qty = gets.chomp
         invstr.broker.sell_stock_for_investor(invstr.id, tckr, qty)
     when "cancel"
-        print "Request cancelled."
+        print "          Request cancelled."
     else
-        print "Invalid Command."
+        print "          Invalid Command."
         gets
         direct_broker(invstr)
     end
@@ -81,35 +122,39 @@ def launch_investor_interface(invstr)
         system("clear")
         puts "\n\n\n\n\n\n"
         puts "          Please type a command for PetS to execute"
-        puts "          If you are unsure, enter h or help for your options"
+        puts "          If you are unsure, enter 'help' for your options"
+        puts "\n\n\n"
+        print "          "
         input = gets.chomp
 
         case input
-        when "help" || "h" #help
+        when (/^h$|help/i) #help tested
             puts ""
             investor_help
-        when "q" || "quit"   #logout
+        when (/quit/i)   #logout tested
             logout
             break
-        when "quote" #print a position of a single equity that i own
-            puts "          Do you know the company ticker?"
+        when (/quote/i) #print a position of a single equity that i own
+            print "          Do you know the company ticker?:  "
             tckr = gets.chomp
             quote(invstr, tckr)
 
-        when "portfolio" #print all positions
+        when (/portfolio/i) #print all positions
             portfolio_method(invstr)
 
-        when "deposit"  #deposit (monopoly money!)
+        when (/deposit/i)  #deposit (monopoly money!)
             deposit_method
-        when "withdraw" || "get money"  # withdraw (sad times!)
+        when (/withdraw/i) # withdraw (sad times!)
             withdraw_method
-        when "broker" || "b"   #broker inquiry
+        when (/broker/i)  #broker inquiry
             display_broker_info(invstr)
-        when "trade" #direct broker to action
+        when (/trade/i) #direct broker to action
             direct_broker
         else
+            puts "\n\n\n"
             puts "          I don't recognize that command!"
             puts "          Here's a bit of help!"
+            gets
             investor_help
         end
 

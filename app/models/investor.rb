@@ -5,7 +5,7 @@ class Investor < ActiveRecord::Base
 
     def get_broker_contact
         br_full_name = "#{self.broker.first_name} #{self.broker.last_name}"
-        "Your friendly trader is #{br_full_name}.\nTheir phone number is #{self.broker.telephone}.\n Their email address is #{self.broker.email}."
+        [br_full_name, self.broker.telephone, self.broker.email]
     end
 
     def add_cash(amount)
@@ -68,7 +68,7 @@ class Investor < ActiveRecord::Base
         output = {ticker: tckr, shares: 0, total_value: 0.0 }
 
         tr_arr.each do |trans|
-            puts trans
+            
             if trans.is_purchase?
                 output[:shares] += trans.quantity
                 output[:total_value] += (trans.quantity * trans.price)

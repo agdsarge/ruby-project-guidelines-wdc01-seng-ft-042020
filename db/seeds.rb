@@ -35,6 +35,8 @@ wf = Company.find_or_create_by(ticker: "WFC", name: "Wells Fargo & Company", cur
 mmm = Company.find_or_create_by(ticker: "MMM", name:"3M Company", current_price: 148.50)
 aapl = Company.find_or_create_by(ticker: "AAPL", name: "Apple Inc.", current_price: 300.80)
 
+
+# Initialize some transactions using back dated stocks (march 20th, 2020 ish). Gotta show gains.
 epb.buy_stock("aapl", 10)
 epb.buy_stock("aapl", 20)
 epb.sell_stock("aapl", 5)

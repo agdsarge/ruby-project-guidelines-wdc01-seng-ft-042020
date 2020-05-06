@@ -18,10 +18,9 @@ class Investor < ActiveRecord::Base
     end
 
     def stock_position(tckr)
+
         co = Company.find_by(ticker: tckr.upcase)
         tr_arr = Transaction.where("investor_id = ? AND company_id = ?", self.id, co.id)
-
-        #TODO make posit valid we want output in this hash format.
         output = {ticker: tckr, shares: 0, total_value: 0.0 }
 
         tr_arr.each do |trans|
@@ -35,20 +34,11 @@ class Investor < ActiveRecord::Base
             end
 
         end
-
-        # posit = tr_arr.reduce({ticker: tckr.upcase, shares: 0, total_value: 0}) do |memo, transaction|
-        #     binding.pry
-        #     transaction.is_purchase? ? memo[:shares] += transaction.quantity : memo[:shares] -= transaction.quantity
-        #     memo[:shares] += (transaction.is_purchase? ? (transaction.quantity) : (-1 * transaction.quantity))
-        #     memo[:total_value] += (transaction.is_purchase? ? (transaction.quantity * transaction.price) : (-1 * transaction.quantity * transaction.price))
-        # end
-        # output hash {ticker: tckr, shares: INT, total_value: FLT }
-        # posit
         output
     end
 
     def all_positions
-        #call stock_positions
+        # call stock_positions
         tr_arr = Transaction.where("investor_id = ?", self.id)
     
         return_arr = tr_arr.map do |trans|
@@ -61,6 +51,7 @@ class Investor < ActiveRecord::Base
     end
 
     def unrealized_gain
+        #update initial purchases on seed file so that the current price is (hopefully lower) different than the purchase price
     end
 
     private

@@ -29,16 +29,50 @@ def display_broker_info(invstr)
 end
 
 def deposit_method(invstr)
-    ""
-    
+    puts "\n\n\n\n\n\n"
+    print "          How much would you like to deposit today?:  "
+    amount = gets.chomp
+    invstr.add_cash(amount)
     gets
 end
 
 def withdraw_method(invstr)
+    puts "\n\n\n\n\n\n"
+    print "          How much would you like to withdraw today?:  "
+    amount = gets.chomp
+    invstr.withdraw_cash(amount)
     gets
 end
 
-def direct_broker
+def direct_broker(invstr)
+    puts "\n\n\n\n\n\n"
+    print "          Would you like to buy or sell today?:  "
+    cmd = gets.chomp
+
+    case cmd
+    when "buy" || "b"
+        puts "\n\n\n"
+        print "          What stock would you like to buy? (Please provide ticker):  "
+        tckr = gets.chomp
+        puts "\n\n\n"
+        print "          How many shares would you like to buy?:  "
+        qty = gets.chomp
+        invstr.broker.buy_stock_for_investor(invstr.id, tckr, qty)
+    when "sell"
+        puts "\n\n\n"
+        print "          What stock would you like to sell today? (Please provide ticker):  "
+        tckr = gets.chomp
+        puts "\n\n\n"
+        print "          How many shares would you like to sell?:  "
+        qty = gets.chomp
+        invstr.broker.sell_stock_for_investor(invstr.id, tckr, qty)
+    when "cancel"
+        print "Request cancelled."
+    else
+        print "Invalid Command."
+        gets
+        direct_broker(invstr)
+    end
     gets
 end
 

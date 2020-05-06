@@ -44,7 +44,7 @@ class Broker < ActiveRecord::Base
         inv.buy_stock(tckr, quantity)
     end
 
-    def sell_stock_for_investor
+    def sell_stock_for_investor(client_id, tckr, quantity)
         inv = Investor.find(investor_id)
         raise "This investor is not your personal client" unless self.id == inv.broker_id
         inv.sell_stock(tckr, quantity)

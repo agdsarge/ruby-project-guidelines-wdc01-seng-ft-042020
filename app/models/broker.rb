@@ -21,7 +21,7 @@ class Broker < ActiveRecord::Base
         end_point = '/stock/market/batch'
         query_string = "?symbols=#{tckr_list_string}&types=quote&"
         #token = 'pk_5cd3b7f4dbb54f5e8a29a3474057fb68'
-        response = RestClient.get("#{url}#{end_point}#{query_string}token=#{token}")
+        response = RestClient.get("#{url}#{end_point}#{query_string}token=#{TOKEN}")
         #endpoints
         #querystring => transform some array of companytickers into string separated by commas
 
@@ -49,7 +49,7 @@ class Broker < ActiveRecord::Base
         url = 'https://cloud.iexapis.com/stable'
         end_point = "/stock/#{tckr.downcase}/batch?"
         query_string = "types=quote&"
-        response = RestClient.get("#{url}#{end_point}#{query_string}token=#{token}")
+        response = RestClient.get("#{url}#{end_point}#{query_string}token=#{TOKEN}")
         #url
         #endpoints
         #querystring => transform some array of companytickers into string separated by commas

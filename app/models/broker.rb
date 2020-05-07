@@ -10,6 +10,69 @@ class Broker < ActiveRecord::Base
 
     #Instance Methods
 
+    def update_all_prices
+        #api
+        #url
+        tckrlist = self.get_companies.map { |elem_arr| elem_arr[1] }
+        tckr_list_string = tckrlist.join(",").downcase
+        url = 'https://cloud.iexapis.com/stable'
+        end_point = '/stock/market/batch'
+        query_string = "?symbols=#{tckr_list_string}&types=quote&"
+        token = 'pk_5cd3b7f4dbb54f5e8a29a3474057fb68'
+        response = RestClient.get("#{url}#{end_point}#{query_string}token=#{token}")
+        #endpoints
+        #querystring => transform some array of companytickers into string separated by commas
+
+        #parse with json
+
+        json = JSON.parse(response)
+
+     
+
+        json.each do |k, v|
+                value = v["quote"]["latestPrice"]
+
+                stock = Company.find_by(ticker: k.upcase)
+                stock.current_price = value
+                stock.save
+        end
+
+        return true
+
+    end
+
+    def update_stock_price(tckr)
+        #return a float with current price
+        #api
+        url = 'https://cloud.iexapis.com/stable'
+        end_point = "/stock/#{tckr.downcase}/batch?"
+        query_string = "types=quote&"
+        token_public = 'pk_5cd3b7f4dbb54f5e8a29a3474057fb68'
+        response = RestClient.get("#{url}#{end_point}#{query_string}token=#{token_public}")
+        #url
+        #endpoints
+        #querystring => transform some array of companytickers into string separated by commas
+
+        #parse with json
+
+        json = JSON.parse(response)
+
+        #pp json["quote"]
+
+        return [json["quote"]["companyName"], json["quote"]["latestPrice"]]
+
+    end
+
+    def create_new_company(tckr)
+        comp_arr = update_stock_price(tckr) #[name, price]
+        Company.find_or_create_by(ticker: tckr.upcase, name: comp_arr[0], current_price: comp_arr[1])
+
+    end
+    
+    def get_companies #tested
+        #returns Array of Arrays name is [0], ticker is [1]
+        Company.all.pluck(:name, :ticker)
+    end
 
     def create_new_client(fname, lname, uname, pword, cash)
         #class method all brokers all clients. assigns to self

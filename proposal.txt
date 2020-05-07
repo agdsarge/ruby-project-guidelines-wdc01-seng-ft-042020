@@ -1,59 +1,21 @@
+a modest proposal
+    for tomorrow's presentation
 
+###before SEED with nice values
 
-Pittaluga et Sargeant is a new investment firm with many brokers and many investors.
+    1. demonstrate log in
+    2. demonstrate both user types, Investor and Broker
+        2a. different help menus > different things to do
+    3. Log out
+    4. Bad username/password combos
+    5. CRUD
+    6. Log-in as a broker
+        CR - look at their management portfolio
+        6C - create a new client
+        6c2 - create a millionaire client
+        CU - API calls to update all prices
+        CC - track a new company (suggestion from audience)
+        - buy shares for the millionaire in that company
+        - sell shares for another client with another company (wfc)
 
-The brokers need a application to interact with their investor portfolios. The investors need an application to read their information.
-
-    A broker has many investors.
-    A investor belongs to a broker.
-
-    |investor|>----|Broker|
-
-
-In addition, we have a model of companies.
-
-    A company has many investors through stocks.
-    An investor has many companies through stocks.
-
-    A share belongs to an investor.
-    An investor has many shares.
-
-    A share belongs to a company.
-    A company has many shares.
-
-    |company|-<|shares|>-|investors|
-        |______________________|
-        (has many through shares)
-
-On a typical workday,
-
-    1. As a broker, I want to log into the system with a password so that I can go to work.
-    2. As a broker, I want to know all of my investors and see their positions.
-    3. As a broker, I want to buy or sell stock on behalf of my investors.
-    4. As a broker, I want to do some basic CRUD operations. For example:
-        4a. Create new investors or brokers
-        4b. Read a investor's portfolio. (Access API for entertaining suggestions)
-        4c. Update a investor's portfolio by executing trades.
-        4d. Delete a user or sell all shares of a company.
-
-For a typical investor,
-
-    1. As a investor, I want to log into the system with a password and know my information is secure.
-    2. As a investor, I want to see who my broker is so I know who requests my trades.
-    3. As a investor, I want to know my unrealized gains or losses for my portfolio.
-    4. As a investor, I want to be able direct my broker to buy or sell a stock.
-
-##############
-Seed a price for yesterday to
-TODO TODAY:
-    Seed prices
-
-    Build out models. Prioritize the client transaction company model first.
-    Github
-
-
-
-
-
-    Company
-    t.float yesterday_price
+        - drop client Nic Cage for his gambling debts

@@ -29,7 +29,7 @@ class Broker < ActiveRecord::Base
 
         json = JSON.parse(response)
 
-     
+
 
         json.each do |k, v|
                 value = v["quote"]["latestPrice"]
@@ -67,9 +67,8 @@ class Broker < ActiveRecord::Base
     def create_new_company(tckr)
         comp_arr = update_stock_price(tckr) #[name, price]
         Company.find_or_create_by(ticker: tckr.upcase, name: comp_arr[0], current_price: comp_arr[1])
-
     end
-    
+
     def get_companies #tested
         #returns Array of Arrays name is [0], ticker is [1]
         Company.all.pluck(:name, :ticker)

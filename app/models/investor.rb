@@ -13,14 +13,14 @@ class Investor < ActiveRecord::Base
 
         if self.account_cash.nil?
             balance = 0
-        else 
+        else
             balance = self.account_cash
         end
 
         self.update(account_cash: (balance+amount).round(2))
         self.save
     end
-   
+
     def withdraw_cash(amount)
         raise "You cannot withdraw a negative number!" unless amount >= 0.00
         raise "You must have deposited cash before" if self.account_cash == nil
@@ -44,21 +44,26 @@ class Investor < ActiveRecord::Base
             return "bad!"
         end
         execute_transaction(tckr, quantity, true)
+        # binding.pry
         self.withdraw_cash(co.current_price * quantity)
+        self.save
     end
 
     def sell_stock(tckr, quantity)
         #have company in portfolio
+        co = Company.find_by(ticker: tckr.upcase)
         if self.stock_position(tckr)[:shares] == 0
-            puts "You have 0 shares of this stock"
+            puts "          You have 0 shares of this stock"
         elsif self.stock_position(tckr)[:shares] < quantity
-            puts "You do not have this many shares to sell, buddy. You only have #{self.stock_position(tckr)[:shares]} shares."
+            puts "          You do not have this many shares to sell. You only have #{self.stock_position(tckr)[:shares]} shares."
         else
             execute_transaction(tckr, quantity, false)
+            self.add_cash(co.current_price * quantity)
+            self.save
         end
 
         #have more shares than quantity to sell
-       
+
     end
 
     def stock_position(tckr)
@@ -68,7 +73,7 @@ class Investor < ActiveRecord::Base
         output = {ticker: tckr, shares: 0, total_value: 0.0 }
 
         tr_arr.each do |trans|
-            
+
             if trans.is_purchase?
                 output[:shares] += trans.quantity
                 output[:total_value] += (trans.quantity * trans.price)
@@ -85,7 +90,7 @@ class Investor < ActiveRecord::Base
     def all_positions
         # call stock_positions
         tr_arr = Transaction.where("investor_id = ?", self.id)
-    
+
         return_arr = tr_arr.map do |trans|
             co = Company.find(trans.company_id)
             self.stock_position(co.ticker)

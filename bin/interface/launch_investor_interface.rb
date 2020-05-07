@@ -126,6 +126,7 @@ def direct_broker(invstr) #direct broker to action
         puts "\n\n\n"
         print "          How many shares would you like to buy?:  "
         qty = gets.chomp
+        #invstr.broker.refresh_all_prices
         invstr.broker.buy_stock_for_investor(invstr.id, tckr, qty.to_i)
         cash_balance(invstr)
     when (/^sell$/i)
@@ -135,6 +136,7 @@ def direct_broker(invstr) #direct broker to action
         puts "\n\n\n"
         print "          How many shares would you like to sell?:  "
         qty = gets.chomp
+        #invstr.broker.refresh_all_prices
         invstr.broker.sell_stock_for_investor(invstr.id, tckr, qty.to_i)
         cash_balance(invstr)
     when "(/^cancel$/i)"

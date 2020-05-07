@@ -11,6 +11,12 @@ def broker_help
     puts "          portfolio" #print all positions
     puts "            - this command will print all positions."
     puts "\n"
+    puts "          update" #print all positions
+    puts "            - this command will provide PetS with the latest market prices."
+    puts "\n"
+    puts "          companies" #print all positions
+    puts "            - this displays all companies tracked by PetS."
+    puts "\n"
     puts "          purchase stock"  #deposit (monopoly money!)
     puts "            - this command will allow you to buy stock for an investor."
     puts "            * require an investor id, stock ticker, and a number of shares to purchase."
@@ -126,10 +132,37 @@ def purchase_stock(brkr)
     tckr = gets.chomp.upcase
     print "          How many shares should will be purchased?: "
     qty = gets.chomp.to_i
+    #refresh_all_prices(brkr)
     brkr.buy_stock_for_investor(inv_id, tckr, qty) #error handle later
     gets
     puts "          Purchase successful."
 gets
+end
+
+def new_company(brkr)
+    system("clear")
+    puts "\n\n\n\n\n\n"
+    print "          What is the ticker of the company that PetS will track?: "
+    tckr = gets.chomp.upcase
+    new_c = brkr.create_new_company(tckr)
+    puts "          PetS now tracks #{new_c.name}"
+    gets
+end
+
+def refresh_all_prices(brkr)
+    puts "\n\n\n\n"
+    brkr.update_all_prices
+    puts "          PetS now knows the most recent prices of all tracked securities."
+    gets
+end
+
+def list_all_companies(brkr)
+    system("clear")
+    puts "\n\n\n\n"
+    puts "          PetS specializes in the following companies: "
+    puts "\n\n"
+    brkr.get_companies.each {|arr| puts "          #{arr[1]} - #{arr[0]}"} #arr of arr
+    gets
 end
 
 
@@ -140,6 +173,7 @@ def sell_stock(brkr)
     tckr = gets.chomp.upcase
     print "          How many shares should will be sold?: "
     qty = gets.chomp.to_i
+    #refresh_all_prices(brkr)
     brkr.sell_stock_for_investor(inv_id, tckr, qty) #error handle later
     gets
     puts "          Sale successful."
@@ -170,10 +204,14 @@ def launch_broker_interface(brkr)
             new_investor(brkr)
         when (/^new broker$/i)
             new_broker(brkr)
-        when(/^new company$/i) ### TODO
+        when(/^new company$/i)
             new_company(brkr)
+        when(/^companies$/i)
+            list_all_companies(brkr)
         when(/^purchase stock$/i)
             purchase_stock(brkr)
+        when(/^update$/i)
+            refresh_all_prices(brkr)
         when(/^sell stock$/i)
             sell_stock(brkr)
         when (/^quit$/i)   #logout tested many many times

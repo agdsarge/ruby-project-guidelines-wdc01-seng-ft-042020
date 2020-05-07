@@ -1,5 +1,3 @@
-
-
 def investor_help
     system("clear")
     puts "\n\n\n\n\n\n"

@@ -14,15 +14,10 @@ end
 
 def run
     user = login
-
+    puts "          It's good to see you again, #{user.first_name}"
+    puts "\n\n"
+    gets
     menu_select(user)
-    # while true
-    # => login screen
-            #username, password
-    #  > corresponding menu
-    #
-    # end
-
 end
 
 run

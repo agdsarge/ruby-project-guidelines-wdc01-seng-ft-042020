@@ -8,26 +8,28 @@ def broker_help
     puts "          clients" #print all client names in a numbered list
     puts "            - this command will print all client names in a numbered list."
     puts "\n"
-    puts "          quote" # that i own
-    puts "            - this command will print a position of a single equity."
-    puts "            * require a company's ticker"
-    puts "\n"
     puts "          portfolio" #print all positions
     puts "            - this command will print all positions."
     puts "\n"
-    puts "          deposit"  #deposit (monopoly money!)
-    puts "            - this command will allow you to deposit money."
-    puts "            * require an amount to deposit."
+    puts "          purchase stock"  #deposit (monopoly money!)
+    puts "            - this command will allow you to buy stock for an investor."
+    puts "            * require an investor id, stock ticker, and a number of shares to purchase."
     puts "\n"
-    puts "          withdraw"  # withdraw (sad times!)
-    puts "            - this command will allow you to withdraw money."
-    puts "            * require an amount to withdraw."
+    puts "          sell stock"  # withdraw (sad times!)
+    puts "            - this command will allow you to sell stock for an investor."
+    puts "            * require an investor id, stock ticker, and a number of shares to sell."
     puts "\n"
-    puts "          broker"   #broker inquiry
+    puts "          new investor"   #new client
+    puts "            - this command will allow you to create a new client."
+    puts "            * require a first name, last name, username, password, and an initial deposit."
+    puts "\n"
+    puts "          new company"   #new company to track
     puts "            - this command will allow you to see your broker's contact information."
+    puts "            * require a ticker and name."
     puts "\n"
-    puts "          trade" #direct broker to action
-    puts "            - this command will allow you to request your broker's assistance to buy and sell shares."
+    puts "          new broker"   #new broker
+    puts "            - this command will allow you to create a new broker."
+    puts "            * require a first name, last name, username, password, email and a telephone number."
     puts "\n"
     gets
 
@@ -45,28 +47,6 @@ def client_list(brkr)
     new_idea = brkr.investors #an array of invsestor instances
     puts "\n\n\n"
     new_idea.each_with_index {|c, i| puts "          #{i+1}. #{c.first_name} #{c.last_name} ID: #{c.id}"}
-    gets
-end
-
-def quote(invstr, tckr)
-    stock_hash = invstr.stock_position(tckr)
-    total_two_digits = stock_hash[:total_value]
-
-
-    puts "\n\n\n"
-    puts "          Here is your position for #{stock_hash[:ticker].upcase}."
-    puts "          You hold #{stock_hash[:shares]} shares."
-    puts "          The current market value of your shares is $#{'%.2f' % total_two_digits}"
-
-    gets
-end
-
-def quote_print(stk_hsh)
-    total_two_digits = stk_hsh[:total_value]
-    puts "\n\n"
-    puts "          Here is your position for #{stk_hsh[:ticker].upcase}."
-    puts "          You hold #{stk_hsh[:shares]} shares."
-    puts "          The current market value of your shares is $#{'%.2f' % total_two_digits}"
     gets
 end
 
@@ -140,108 +120,33 @@ def new_broker(brkr)
 end
 
 def purchase_stock(brkr)
-    print "          If you know the invetor's ID number, please enter it now."
+    print "          If you know the investor's ID number, please enter it now: "
     inv_id = gets.chomp.to_i
-    print "          Please enter the company's ticker"
+    print "          Please enter the company's ticker: "
     tckr = gets.chomp.upcase
-    print "          How many shares should will be purchased?"
+    print "          How many shares should will be purchased?: "
     qty = gets.chomp.to_i
     brkr.buy_stock_for_investor(inv_id, tckr, qty) #error handle later
     gets
     puts "          Purchase successful."
 gets
 end
-# def buy_stock_for_investor(investor_id, tckr, quantity)
-#     inv = Investor.find(investor_id)
-#     raise "This investor is not your personal client" unless self.id == inv.broker_id
-#     inv.buy_stock(tckr, quantity)
-# end
 
 
 def sell_stock(brkr)
+    print "          If you know the investor's ID number, please enter it now: "
+    inv_id = gets.chomp.to_i
+    print "          Please enter the company's ticker: "
+    tckr = gets.chomp.upcase
+    print "          How many shares should will be sold?: "
+    qty = gets.chomp.to_i
+    brkr.sell_stock_for_investor(inv_id, tckr, qty) #error handle later
+    gets
+    puts "          Sale successful."
 
 gets
 end
 
-
-
-def display_broker_info(invstr)
-    arr = invstr.get_broker_contact
-
-    puts "\n\n\n\n\n\n"
-    puts "          Your friendly broker is: #{arr[0]}"
-    puts "          Their telephone number is: #{arr[1]}"
-    puts "          Their email address is: #{arr[2]}"
-
-    gets
-end
-
-def cash_balance(invstr)
-    puts "\n\n\n"
-    invstr = Investor.find(invstr.id)
-    print "          You have $#{'%.2f' % invstr.account_cash} available."
-    gets
-end
-
-def deposit_method(invstr)
-    puts "\n\n\n\n\n\n"
-    print "          How much would you like to deposit today?:  "
-    amount = gets.chomp
-    invstr.add_cash(amount.to_f)
-    puts "          Your deposit has gone through."
-    print "          You have $#{'%.2f' % invstr.account_cash} available."
-    gets
-end
-
-def withdraw_method(invstr)
-    puts "\n\n\n\n\n\n"
-    print "          How much would you like to withdraw today?:  "
-    amount = gets.chomp.to_f
-    if amount < invstr.account_cash
-        invstr.withdraw_cash(amount)
-        puts "          Your withdrawl has been transferred to your linked account."
-        print "          You have $#{'%.2f' % invstr.account_cash} available."
-    else
-        puts "          You cannot overdraw this account."
-        puts "          You have $#{'%.2f' % invstr.account_cash} available."
-        puts "          Please withdraw a valid amount."
-    end
-    gets
-end
-
-def direct_broker(invstr) #direct broker to action
-    puts "\n\n\n\n\n\n"
-    print "          Would you like to buy or sell today?:  "
-    cmd = gets.chomp
-
-    case cmd
-    when (/^buy$/i)
-        puts "\n\n\n"
-        print "          What stock would you like to buy? (Please provide ticker):  "
-        tckr = gets.chomp
-        puts "\n\n\n"
-        print "          How many shares would you like to buy?:  "
-        qty = gets.chomp
-        invstr.broker.buy_stock_for_investor(invstr.id, tckr, qty.to_i)
-        cash_balance(invstr)
-    when (/^sell$/i)
-        puts "\n\n\n"
-        print "          What stock would you like to sell today? (Please provide ticker):  "
-        tckr = gets.chomp
-        puts "\n\n\n"
-        print "          How many shares would you like to sell?:  "
-        qty = gets.chomp
-        invstr.broker.sell_stock_for_investor(invstr.id, tckr, qty.to_i)
-        cash_balance(invstr)
-    when "(/^cancel$/i)"
-        print "          Request cancelled."
-    else
-        print "          Invalid Command."
-        gets
-        direct_broker(invstr)
-    end
-    gets
-end
 
 def launch_broker_interface(brkr)
     while true
@@ -271,23 +176,6 @@ def launch_broker_interface(brkr)
             purchase_stock(brkr)
         when(/^sell stock$/i)
             sell_stock(brkr)
-
-            #################
-        when (/^quote$/i) #print a position of a single equity that i own tested
-            print "          Do you know the company ticker?:  "
-            tckr = gets.chomp
-            quote(brkr, tckr)
-        when (/^balance$/i) #print cash balace
-            cash_balance(brkr)
-
-        when (/^deposit$/i)  #deposit (monopoly money!) #tested
-            deposit_method(brkr)
-        when (/^withdraw$/i) # withdraw (sad times!) valid deposit / overdraw tested.
-            withdraw_method(brkr)
-        when (/^broker$/i)  #broker inquiry tested
-            display_broker_info(brkr)
-        when (/^trade$/i) #direct broker to action #tested
-            direct_broker(brkr)
         when (/^quit$/i)   #logout tested many many times
             logout
             break

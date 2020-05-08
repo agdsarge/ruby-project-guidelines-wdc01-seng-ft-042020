@@ -29,8 +29,6 @@ class Broker < ActiveRecord::Base
 
         json = JSON.parse(response)
 
-
-
         json.each do |k, v|
                 value = v["quote"]["latestPrice"]
 
@@ -38,7 +36,6 @@ class Broker < ActiveRecord::Base
                 stock.current_price = value
                 stock.save
         end
-
         return true
 
     end

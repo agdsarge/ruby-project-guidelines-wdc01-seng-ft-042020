@@ -21,35 +21,47 @@ class Broker < ActiveRecord::Base
         end_point = '/stock/market/batch'
         query_string = "?symbols=#{tckr_list_string}&types=quote&"
         #token = 'pk_5cd3b7f4dbb54f5e8a29a3474057fb68'
-        response = RestClient.get("#{url}#{end_point}#{query_string}token=#{TOKEN}")
+
+        composite_url = "#{url}#{end_point}#{query_string}token=#{TOKEN}"
+
+        response = Validation.validate_api(composite_url)
         #endpoints
         #querystring => transform some array of companytickers into string separated by commas
 
         #parse with json
 
-        json = JSON.parse(response)
+        if response[0]
+            json = JSON.parse(response[1])
 
 
 
-        json.each do |k, v|
-                value = v["quote"]["latestPrice"]
+            json.each do |k, v|
+                    value = v["quote"]["latestPrice"]
 
-                stock = Company.find_by(ticker: k.upcase)
-                stock.current_price = value
-                stock.save
+                    stock = Company.find_by(ticker: k.upcase)
+                    stock.current_price = value
+                    stock.save
+            end
+
+            return true
+        else 
+            return false
         end
-
-        return true
 
     end
 
     def update_stock_price(tckr)
         #return a float with current price
+        
         #api
+        
         url = 'https://cloud.iexapis.com/stable'
         end_point = "/stock/#{tckr.downcase}/batch?"
         query_string = "types=quote&"
-        response = RestClient.get("#{url}#{end_point}#{query_string}token=#{TOKEN}")
+
+        composite_url = "#{url}#{end_point}#{query_string}token=#{TOKEN}"
+
+        response = Validation.validate_api(composite_url)
         #url
         #endpoints
         #querystring => transform some array of companytickers into string separated by commas

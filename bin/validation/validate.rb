@@ -51,9 +51,10 @@ class Validation
             system('clear')
             puts '\n\n\n\n\n\n'
             puts "          There was a problem with your API call. Error: #{err.response}"
+            gets
             return [false, err.response]
           else
-            puts 'It worked!'
+            
             return [true, resp]
           end
 

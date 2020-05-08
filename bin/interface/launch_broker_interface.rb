@@ -139,10 +139,26 @@ gets
 end
 
 def new_company(brkr)
-    system("clear")
-    puts "\n\n\n\n\n\n"
-    print "          What is the ticker of the company that PetS will track?: "
-    tckr = gets.chomp.upcase
+    
+    check_state = false
+    
+    while check_state == false
+        system("clear")
+        puts "\n\n\n\n\n\n"
+        print "          What is the ticker of the company that PetS will track?: "
+        tckr = gets.chomp.upcase
+
+        url = 'https://cloud.iexapis.com/stable'
+        end_point = "/stock/#{tckr.downcase}/batch?"
+        query_string = "types=quote&"
+
+        composite_url = "#{url}#{end_point}#{query_string}token=#{TOKEN}"
+
+        response = Validation.validate_api(composite_url)
+        
+        check_state = response[0]
+
+    end
     new_c = brkr.create_new_company(tckr)
     puts "          PetS now tracks #{new_c.name}"
     gets

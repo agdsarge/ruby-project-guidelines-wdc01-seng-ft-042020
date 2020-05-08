@@ -49,9 +49,9 @@ def logout
 end
 
 def client_list(brkr)
-    new_idea = brkr.investors #an array of invsestor instances
+    new_idea = brkr.get_investor_clients #an array of invsestor instances
     puts "\n\n\n"
-    new_idea.each_with_index {|c, i| puts "          #{i+1}. #{c.first_name} #{c.last_name} ID: #{c.id}"}
+    new_idea.each_with_index {|c_arr, i| puts "          #{i+1}. #{c_arr[0]} #{c_arr[1]} ID: #{c_arr[-1]}"}
     gets
 end
 
@@ -66,7 +66,7 @@ def br_portfolio_method(brkr)
         investor.values.each do |arr|
             arr.each do |elem|
                 total = '%.2f' % elem[:total_value]
-                puts "                    The current position in #{elem[:ticker]} is #{elem[:shares]} shares valued at $#{total}."
+                puts "                    The current position in #{elem[:ticker]} is #{elem[:shares]} shares purchased at $#{total}."
                 total_funds_managed += elem[:total_value]
             end
         end
@@ -79,16 +79,23 @@ def br_portfolio_method(brkr)
 end
 
 def new_investor(brkr)
-    print "          First name:      "
-    fname = gets.chomp
-    print "          Last name:       "
-    lname = gets.chomp
-    print "          username:        " #validate username
-    uname = gets.chomp
-    print "          password:        "
-    pword = gets.chomp
-    print "          Initial Deposit: "
-    acc_cash = gets.chomp.to_f
+    check_state = false
+    while check_state == false
+        system("clear")
+        puts "\n\n\n"
+        print "          First name:      "
+        fname = gets.chomp
+        print "          Last name:       "
+        lname = gets.chomp
+        print "          username:        " #validate username
+        uname = gets.chomp
+        print "          password:        "
+        pword = gets.chomp
+        print "          Initial Deposit: "
+        acc_cash = gets.chomp.to_f
+        valid_obj = {first_name: fname, last_name: lname, username: uname, password: pword, account_cash: acc_cash }
+        check_state = Validation.validate?(valid_obj)
+    end
     brkr.create_new_client(fname, lname, uname, pword, acc_cash)
     gets
     system("clear")
@@ -103,18 +110,25 @@ def new_investor(brkr)
 end
 
 def new_broker(brkr)
-    print "          First name:      "
-    fname = gets.chomp
-    print "          Last name:       "
-    lname = gets.chomp
-    print "          username:        " #validate username
-    uname = gets.chomp
-    print "          password:        "
-    pword = gets.chomp
-    print "          Email:           "
-    email = gets.chomp
-    print "          Telephone:       "
-    tele = gets.chomp
+    check_state = false
+    while check_state == false
+        system("clear")
+        puts "\n\n\n"
+        print "          First name:      "
+        fname = gets.chomp
+        print "          Last name:       "
+        lname = gets.chomp
+        print "          username:        " #validate username
+        uname = gets.chomp
+        print "          password:        "
+        pword = gets.chomp
+        print "          Email:           "
+        email = gets.chomp
+        print "          Telephone:       "
+        tele = gets.chomp
+        valid_obj = {first_name: fname, last_name: lname, username: uname, password: pword, email: email}
+        check_state = Validation.validate?(valid_obj)
+    end
     Broker.find_or_create_by(first_name: fname, last_name: lname, username: uname, password: pword, email: email, telephone: tele)
     gets
     system("clear")
@@ -125,24 +139,57 @@ def new_broker(brkr)
 end
 
 def purchase_stock(brkr)
-    print "          If you know the investor's ID number, please enter it now: "
-    inv_id = gets.chomp.to_i
-    print "          Please enter the company's ticker: "
-    tckr = gets.chomp.upcase
-    print "          How many shares should will be purchased?: "
-    qty = gets.chomp.to_i
-    #refresh_all_prices(brkr)
-    brkr.buy_stock_for_investor(inv_id, tckr, qty) #error handle later
-    gets
-    puts "          Purchase successful."
-gets
+    check_state = false
+    while check_state == false
+        print "          If you know the investor's ID number, please enter it now: "
+        inv_id = gets.chomp.to_i
+        print "          Please enter the company's ticker: "
+        tckr = gets.chomp.upcase
+        print "          How many shares should will be purchased?: "
+        qty = gets.chomp.to_i
+        #refresh_all_prices(brkr)
+        check_state = Validation.validate?({id: inv_id, ticker:tckr})
+    end
+    result = brkr.buy_stock_for_investor(inv_id, tckr, qty) #error handle later
+    if result
+        puts "\n\n\n"
+        puts "          Purchase successful."
+        gets
+    else
+        puts "\n\n\n"
+        puts "          There has been an error processing your request. The client has insufficient funds in his account."
+        gets
+    end
 end
 
 def new_company(brkr)
-    system("clear")
-    puts "\n\n\n\n\n\n"
-    print "          What is the ticker of the company that PetS will track?: "
-    tckr = gets.chomp.upcase
+
+    check_state = false
+
+    while check_state == false
+        system("clear")
+        puts "\n\n\n\n\n\n"
+        print "          What is the ticker of the company that PetS will track?: "
+        tckr = gets.chomp.upcase
+
+        url = 'https://cloud.iexapis.com/stable'
+        end_point = "/stock/#{tckr.downcase}/batch?"
+        query_string = "types=quote&"
+
+        composite_url = "#{url}#{end_point}#{query_string}token=#{TOKEN}"
+
+
+        if Validation.validate?({ticker: tckr}) && Validation.validate_api(composite_url)[0]
+
+            response = Validation.validate_api(composite_url)
+
+            check_state = response[0]
+        else
+            puts "\n\n\n"
+            puts "          Please enter an alphanumeric ticker symbol."
+            gets
+        end
+    end
     new_c = brkr.create_new_company(tckr)
     puts "          PetS now tracks #{new_c.name}"
     gets
@@ -160,7 +207,7 @@ def list_all_companies(brkr)
     puts "\n\n\n\n"
     puts "          PetS specializes in the following companies: "
     puts "\n\n"
-    brkr.get_companies.each {|arr| puts "          #{arr[1]} - #{arr[0]}"} #arr of arr
+    brkr.get_companies.each {|arr| puts "          #{arr[1]} - $#{arr[2]} - #{arr[0]}    "} #arr of arr
     gets
 end
 
@@ -214,6 +261,9 @@ def launch_broker_interface(brkr)
         when(/^sell stock$/i)
             sell_stock(brkr)
         when (/^quit$/i)   #logout tested many many times
+            logout
+            break
+        when (/^exit$/i)   #logout tested many many times
             logout
             break
         else

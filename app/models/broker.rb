@@ -21,7 +21,10 @@ class Broker < ActiveRecord::Base
         end_point = '/stock/market/batch'
         query_string = "?symbols=#{tckr_list_string}&types=quote&"
         #token = 'pk_5cd3b7f4dbb54f5e8a29a3474057fb68'
-        response = RestClient.get("#{url}#{end_point}#{query_string}token=#{TOKEN}")
+
+        composite_url = "#{url}#{end_point}#{query_string}token=#{TOKEN}"
+        response = RestClient.get(composite_url)
+        #response = Validation.validate_api(composite_url)
         #endpoints
         #querystring => transform some array of companytickers into string separated by commas
 
@@ -37,27 +40,40 @@ class Broker < ActiveRecord::Base
                 stock.save
         end
         return true
-
     end
+
+    # def stock_valid?(resp)
+    #     if response[1]
+    #         return true #or false
+    #     else
+    #         return
+    #     end
+    # end
 
     def update_stock_price(tckr)
         #return a float with current price
+
         #api
         url = 'https://cloud.iexapis.com/stable'
         end_point = "/stock/#{tckr.downcase}/batch?"
         query_string = "types=quote&"
-        response = RestClient.get("#{url}#{end_point}#{query_string}token=#{TOKEN}")
+
+        composite_url = "#{url}#{end_point}#{query_string}token=#{TOKEN}"
+
+        response = Validation.validate_api(composite_url)
+        # stock_valid(response)
         #url
         #endpoints
         #querystring => transform some array of companytickers into string separated by commas
 
         #parse with json
 
-        json = JSON.parse(response)
+        json = JSON.parse(response[1])
 
         #pp json["quote"]
 
         return [json["quote"]["companyName"], json["quote"]["latestPrice"]]
+
 
     end
 
@@ -68,7 +84,12 @@ class Broker < ActiveRecord::Base
 
     def get_companies #tested
         #returns Array of Arrays name is [0], ticker is [1]
-        Company.all.pluck(:name, :ticker)
+        Company.all.pluck(:name, :ticker, :current_price)
+    end
+
+    def get_investor_clients
+        x = Investor.all.pluck(:first_name, :last_name, :broker_id, :id)
+        return x.select {|i_arr| i_arr[2] == self.id}
     end
 
     def create_new_client(fname, lname, uname, pword, cash)

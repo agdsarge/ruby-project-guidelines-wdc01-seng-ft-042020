@@ -38,7 +38,7 @@ class Broker < ActiveRecord::Base
                 stock = Company.find_by(ticker: k.upcase)
                 stock.current_price = value
                 stock.save
-            end
+        end
         return true
     end
 

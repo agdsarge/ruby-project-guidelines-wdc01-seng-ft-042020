@@ -3,19 +3,21 @@ a modest proposal
 
 ###before SEED with nice values
 
-    1. demonstrate log in
-    2. demonstrate both user types, Investor and Broker
-        2a. different help menus > different things to do
-    3. Log out
-    4. Bad username/password combos
+    1. demonstrate log in #works
+    2. demonstrate both user types, Investor and Broker #works
+        2a. different help menus > different things to do #works
+    3. Log out #works
+    4. Bad username/password combos #works
     5. CRUD
-    6. Log-in as a broker
-        CR - look at their management portfolio
-        6C - create a new client
+    6. Log-in as a broker #log in as Paul
+        CR - look at their management portfolio #works
+        6C - create a new client #work
         6c2 - create a millionaire client
         CU - API calls to update all prices
         CC - track a new company (suggestion from audience)
         - buy shares for the millionaire in that company
         - sell shares for another client with another company (wfc)
 
+        where to go from here
         - drop client Nic Cage for his gambling debts
+        - unrealized gains

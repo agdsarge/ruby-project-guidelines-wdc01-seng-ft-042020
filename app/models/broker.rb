@@ -84,7 +84,7 @@ class Broker < ActiveRecord::Base
 
     def get_companies #tested
         #returns Array of Arrays name is [0], ticker is [1]
-        Company.all.pluck(:name, :ticker)
+        Company.all.pluck(:name, :ticker, :current_price)
     end
 
     def get_investor_clients

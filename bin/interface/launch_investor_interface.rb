@@ -25,7 +25,11 @@ def investor_help
     puts "          trade" #direct broker to action
     puts "            - this command will allow you to request your broker's assistance to buy and sell shares."
     puts "\n"
+    puts "          balance" #account_cash
+    puts "            - this command will display your cash balance"
+    puts "\n"
     gets
+
 
 end
 
@@ -45,7 +49,7 @@ def quote(invstr, tckr)
     puts "\n\n\n"
     puts "          Here is your position for #{stock_hash[:ticker].upcase}."
     puts "          You hold #{stock_hash[:shares]} shares."
-    puts "          The current market value of your shares is $#{'%.2f' % total_two_digits}"
+    puts "          The total purchase price of this position is $#{'%.2f' % total_two_digits}"
 
     gets
 end
@@ -82,8 +86,8 @@ end
 
 def cash_balance(invstr)
     puts "\n\n\n"
-    invstr = Investor.find(invstr.id)
-    print "          You have $#{'%.2f' % invstr.account_cash} available."
+    invstr2 = Investor.find(invstr.id)
+    print "          You have $#{'%.2f' % invstr2.account_cash} available."
     gets
 end
 

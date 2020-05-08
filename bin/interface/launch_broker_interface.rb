@@ -66,7 +66,7 @@ def br_portfolio_method(brkr)
         investor.values.each do |arr|
             arr.each do |elem|
                 total = '%.2f' % elem[:total_value]
-                puts "                    The current position in #{elem[:ticker]} is #{elem[:shares]} shares valued at $#{total}."
+                puts "                    The current position in #{elem[:ticker]} is #{elem[:shares]} shares purchased at $#{total}."
                 total_funds_managed += elem[:total_value]
             end
         end
@@ -207,7 +207,7 @@ def list_all_companies(brkr)
     puts "\n\n\n\n"
     puts "          PetS specializes in the following companies: "
     puts "\n\n"
-    brkr.get_companies.each {|arr| puts "          #{arr[1]} - #{arr[0]}"} #arr of arr
+    brkr.get_companies.each {|arr| puts "          #{arr[1]} - $#{arr[2]} - #{arr[0]}    "} #arr of arr
     gets
 end
 

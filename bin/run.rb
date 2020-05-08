@@ -2,6 +2,7 @@ require_relative '../config/environment'
 require_relative './interface/login.rb'
 require_relative './interface/launch_broker_interface.rb'
 require_relative './interface/launch_investor_interface.rb'
+require_relative './validation/validate.rb'
 
 
 # puts "HELLO WORLD"

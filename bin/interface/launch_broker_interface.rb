@@ -79,16 +79,22 @@ def br_portfolio_method(brkr)
 end
 
 def new_investor(brkr)
-    print "          First name:      "
-    fname = gets.chomp
-    print "          Last name:       "
-    lname = gets.chomp
-    print "          username:        " #validate username
-    uname = gets.chomp
-    print "          password:        "
-    pword = gets.chomp
-    print "          Initial Deposit: "
-    acc_cash = gets.chomp.to_f
+    check_state = false
+    while check_state == false
+        system("clear")
+        print "          First name:      "
+        fname = gets.chomp
+        print "          Last name:       "
+        lname = gets.chomp
+        print "          username:        " #validate username
+        uname = gets.chomp
+        print "          password:        "
+        pword = gets.chomp
+        print "          Initial Deposit: "
+        acc_cash = gets.chomp.to_f
+        valid_obj = {first_name: fname, last_name: lname, username: uname, password: pword, account_cash: acc_cash }
+        check_state = Validation.validate?(valid_obj)
+    end
     brkr.create_new_client(fname, lname, uname, pword, acc_cash)
     gets
     system("clear")

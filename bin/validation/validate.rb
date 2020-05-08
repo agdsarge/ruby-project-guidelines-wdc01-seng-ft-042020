@@ -13,6 +13,8 @@ class Validation
         # {:name => "Enrique", :id => 12, :account_cash => 3.99 }
         lowest_id = Investor.first.id
         highest_id = Investor.last.id
+        username_array = Investor.all.pluck(:username)
+
 
         obj.each do |key, value|
 
@@ -42,6 +44,18 @@ class Validation
                     self.print_invalid(key)
                     return false
                 end
+            when :username
+                if value.class != String || username_array.include?(value)
+                    self.print_invalid(key)
+                    return false
+                end
+            when :password
+                if value.class != String
+                    self.print_invalid(key)
+                    return false
+                end
+
+
             else
                 return false
             end

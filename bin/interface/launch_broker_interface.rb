@@ -49,9 +49,9 @@ def logout
 end
 
 def client_list(brkr)
-    new_idea = brkr.investors #an array of invsestor instances
+    new_idea = brkr.get_investor_clients #an array of invsestor instances
     puts "\n\n\n"
-    new_idea.each_with_index {|c, i| puts "          #{i+1}. #{c.first_name} #{c.last_name} ID: #{c.id}"}
+    new_idea.each_with_index {|c_arr, i| puts "          #{i+1}. #{c_arr[0]} #{c_arr[1]} ID: #{c_arr[-1]}"}
     gets
 end
 

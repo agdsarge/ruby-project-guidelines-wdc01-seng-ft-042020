@@ -87,6 +87,11 @@ class Broker < ActiveRecord::Base
         Company.all.pluck(:name, :ticker)
     end
 
+    def get_investor_clients
+        x = Investor.all.pluck(:first_name, :last_name, :broker_id, :id)
+        return x.select {|i_arr| i_arr[2] == self.id}
+    end
+
     def create_new_client(fname, lname, uname, pword, cash)
         #class method all brokers all clients. assigns to self
         #make sure username will be unique

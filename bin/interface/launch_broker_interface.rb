@@ -82,6 +82,7 @@ def new_investor(brkr)
     check_state = false
     while check_state == false
         system("clear")
+        puts "\n\n\n"
         print "          First name:      "
         fname = gets.chomp
         print "          Last name:       "
@@ -109,18 +110,25 @@ def new_investor(brkr)
 end
 
 def new_broker(brkr)
-    print "          First name:      "
-    fname = gets.chomp
-    print "          Last name:       "
-    lname = gets.chomp
-    print "          username:        " #validate username
-    uname = gets.chomp
-    print "          password:        "
-    pword = gets.chomp
-    print "          Email:           "
-    email = gets.chomp
-    print "          Telephone:       "
-    tele = gets.chomp
+    check_state = false
+    while check_state == false
+        system("clear")
+        puts "\n\n\n"
+        print "          First name:      "
+        fname = gets.chomp
+        print "          Last name:       "
+        lname = gets.chomp
+        print "          username:        " #validate username
+        uname = gets.chomp
+        print "          password:        "
+        pword = gets.chomp
+        print "          Email:           "
+        email = gets.chomp
+        print "          Telephone:       "
+        tele = gets.chomp
+        valid_obj = {first_name: fname, last_name: lname, username: uname, password: pword, email: email}
+        check_state = Validation.validate?(valid_obj)
+    end
     Broker.find_or_create_by(first_name: fname, last_name: lname, username: uname, password: pword, email: email, telephone: tele)
     gets
     system("clear")

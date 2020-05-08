@@ -7,14 +7,12 @@ class Validation
         gets
     end
 
-
     def self.validate?(obj)
 
-        # {:name => "Enrique", :id => 12, :account_cash => 3.99 }
         lowest_id = Investor.first.id
         highest_id = Investor.last.id
-        username_array = Investor.all.pluck(:username)
-
+        username_array = Investor.all.pluck(:username).union(Broker.all.pluck(:username))
+        email_array = Broker.all.pluck(:email)
 
         obj.each do |key, value|
 
@@ -54,8 +52,11 @@ class Validation
                     self.print_invalid(key)
                     return false
                 end
-
-
+            when :email
+                if email_array.include?(value)
+                    self.print_invalid(key)
+                    return false
+                end
             else
                 return false
             end

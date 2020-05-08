@@ -17,13 +17,14 @@ agds = Investor.find_or_create_by(first_name: "Davis", last_name: "Sargeant", us
 jfk = Investor.find_or_create_by(first_name: "Jack", last_name: "Kennedy", username: "jfk", password: "bay_of_pigs", account_cash: 10000.0)
 jma = Investor.find_or_create_by(first_name: "Jack", last_name: "Ma", username: "jma", password: "alibaba", account_cash: 10000.0)
 nic = Investor.find_or_create_by(first_name: "Nic", last_name: "Cage", username: "ncage", password: "national_treasure", account_cash: 25)
+
 as = Investor.find_or_create_by(first_name: "Abhinav", last_name: "Sharma", username: "asharma", password: "itilapp", account_cash: 10000.0)
 ag = Investor.find_or_create_by(first_name: "Alex", last_name: "Gautherin", username: "agautherin", password: "discord", account_cash: 10000.0)
-injae = Investor.find_or_create_by(first_name: "Enrique", last_name: "Pittaluga", username: "epittab", password: "hunter2", account_cash: 10000.0)
-mert
-jl
-jb
-sa
+injae = Investor.find_or_create_by(first_name: "Injae", last_name: "Lee", username: "ilee", password: "pedicab", account_cash: 10000.0)
+mert = Investor.find_or_create_by(first_name: "Mert", last_name: "Ozkaynak", username: "mozkaynak", password: "basketball", account_cash: 10000.0)
+jl = Investor.find_or_create_by(first_name: "Jesse", last_name: "Langley", username: "jlangley", password: "mclaren", account_cash: 10000.0)
+jb = Investor.find_or_create_by(first_name: "Josh", last_name: "Beglan", username: "jbeglan", password: "fenway", account_cash: 10000.0)
+sa = Investor.find_or_create_by(first_name: "Saima", last_name: "Akhtar", username: "sakhtar", password: "architecture", account_cash: 10000.0)
 #
 
 jfk.broker_id = burns.id
@@ -32,6 +33,22 @@ jma.broker_id = burns.id
 epb.broker_id = gb.id
 agds.broker_id = gb.id
 nic.broker_id = gb.id
+
+as.broker_id = pn.id
+ag.broker_id = sn.id
+injae.broker_id = pn.id
+mert.broker_id = sn.id
+jl.broker_id = pn.id
+jb.broker_id = sn.id
+sa.broker_id = pn.id
+
+as.save
+ag.save
+injae.save
+mert.save
+jl.save
+jb.save
+sa.save
 
 nic.save
 epb.save
@@ -62,9 +79,16 @@ epb.sell_stock("aapl", 5)
 epb.buy_stock("aapl", 2)
 epb.buy_stock("mmm", 20)
 
-
 agds.buy_stock("cmg", 10)
 agds.buy_stock("jnj", 20)
 agds.sell_stock("jnj", 5)
 agds.buy_stock("voo", 2)
 agds.buy_stock("sbux", 20)
+
+Transaction.create(investor_id: ag.id, company_id: aapl.id, transaction_date: DateTime.new(2020, 3, 20, 0, 0, 0), price: 229.24, quantity: 1, is_purchase?: true)
+Transaction.create(investor_id: as.id, company_id: bud.id, transaction_date: DateTime.new(2020, 3, 20, 0, 0, 0), price: 40.30, quantity: 1, is_purchase?: true)
+Transaction.create(investor_id: injae.id, company_id: cmg.id, transaction_date: DateTime.new(2020, 3, 20, 0, 0, 0), price: 566.0, quantity: 1, is_purchase?: true)
+Transaction.create(investor_id: mert.id, company_id: jnj.id, transaction_date: DateTime.new(2020, 3, 20, 0, 0, 0), price: 119.89, quantity: 1, is_purchase?: true)
+Transaction.create(investor_id: jl.id, company_id: mmm.id, transaction_date: DateTime.new(2020, 3, 20, 0, 0, 0), price: 124.89, quantity: 1, is_purchase?: true)
+Transaction.create(investor_id: jb.id, company_id: mrk.id, transaction_date: DateTime.new(2020, 3, 20, 0, 0, 0), price: 71.36, quantity: 1, is_purchase?: true)
+Transaction.create(investor_id: sa.id, company_id: pzza.id, transaction_date: DateTime.new(2020, 3, 20, 0, 0, 0), price: 51.0, quantity: 1, is_purchase?: true)

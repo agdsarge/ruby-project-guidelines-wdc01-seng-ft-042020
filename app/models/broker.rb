@@ -23,29 +23,23 @@ class Broker < ActiveRecord::Base
         #token = 'pk_5cd3b7f4dbb54f5e8a29a3474057fb68'
 
         composite_url = "#{url}#{end_point}#{query_string}token=#{TOKEN}"
-
-        response = Validation.validate_api(composite_url)
+        response = RestClient.get(composite_url)
+        #response = Validation.validate_api(composite_url)
         #endpoints
         #querystring => transform some array of companytickers into string separated by commas
 
         #parse with json
 
-        if response[0]
-            json = JSON.parse(response[1])
+        json = JSON.parse(response)
 
-            json.each do |k, v|
-                    value = v["quote"]["latestPrice"]
+        json.each do |k, v|
+                value = v["quote"]["latestPrice"]
 
-                    stock = Company.find_by(ticker: k.upcase)
-                    stock.current_price = value
-                    stock.save
+                stock = Company.find_by(ticker: k.upcase)
+                stock.current_price = value
+                stock.save
             end
-
-            return true
-        else
-            return false
-        end
-
+        return true
     end
 
     # def stock_valid?(resp)

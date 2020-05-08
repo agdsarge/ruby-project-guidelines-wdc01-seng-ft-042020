@@ -41,7 +41,7 @@ class Investor < ActiveRecord::Base
         #check_funds
         co = Company.find_by(ticker: tckr.upcase)
         if insufficient_funds?(co.current_price, quantity)
-            return "bad!"
+            return false
         end
         execute_transaction(tckr, quantity, true)
         # binding.pry

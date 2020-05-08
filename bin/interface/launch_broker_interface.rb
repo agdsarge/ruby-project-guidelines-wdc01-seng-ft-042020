@@ -139,17 +139,27 @@ def new_broker(brkr)
 end
 
 def purchase_stock(brkr)
-    print "          If you know the investor's ID number, please enter it now: "
-    inv_id = gets.chomp.to_i
-    print "          Please enter the company's ticker: "
-    tckr = gets.chomp.upcase
-    print "          How many shares should will be purchased?: "
-    qty = gets.chomp.to_i
-    #refresh_all_prices(brkr)
-    brkr.buy_stock_for_investor(inv_id, tckr, qty) #error handle later
-    gets
-    puts "          Purchase successful."
-gets
+    check_state = false
+    while check_state == false
+        print "          If you know the investor's ID number, please enter it now: "
+        inv_id = gets.chomp.to_i
+        print "          Please enter the company's ticker: "
+        tckr = gets.chomp.upcase
+        print "          How many shares should will be purchased?: "
+        qty = gets.chomp.to_i
+        #refresh_all_prices(brkr)
+        check_state = Validation.validate?({id: inv_id, ticker:tckr})
+    end
+    result = brkr.buy_stock_for_investor(inv_id, tckr, qty) #error handle later
+    if result
+        puts "\n\n\n"
+        puts "          Purchase successful."
+        gets
+    else
+        puts "\n\n\n"
+        puts "          There has been an error processing your request. The client has insufficient funds in his account."
+        gets
+    end
 end
 
 def new_company(brkr)

@@ -12,15 +12,17 @@ class Validation
 
         # {:name => "Enrique", :id => 12, :account_cash => 3.99 }
         lowest_id = Investor.first.id
-        puts lowest_id
         highest_id = Investor.last.id
-        puts highest_id
 
         obj.each do |key, value|
 
             case key
-
-            when :name
+            when :first_name
+                if value.class != String
+                    self.print_invalid(key)
+                    return false
+                end
+            when :last_name
                 if value.class != String
                     self.print_invalid(key)
                     return false
@@ -29,9 +31,14 @@ class Validation
                 if value.class != Integer || value < lowest_id || value > highest_id
                     self.print_invalid(key)
                     return false
-                end 
+                end
             when :account_cash
                 if (value.class != Float && value.class != Integer)
+                    self.print_invalid(key)
+                    return false
+                end
+            when :ticker
+                if value.class != String || value.match?(/[^a-z0-9]/i)
                     self.print_invalid(key)
                     return false
                 end
@@ -47,19 +54,27 @@ class Validation
 
         begin
             resp = RestClient.get(url)
-          rescue RestClient::ExceptionWithResponse, RestClient::Unauthorized, RestClient::Forbidden => err
+
+        rescue RestClient::ExceptionWithResponse, RestClient::Unauthorized, RestClient::Forbidden => err
             system('clear')
-            puts '\n\n\n\n\n\n'
+            puts "\n\n\n\n\n\n"
             puts "          There was a problem with your API call. Error: #{err.response}"
             gets
             return [false, err.response]
-          else
-            
-            return [true, resp]
-          end
+        else
+            json = JSON.parse(resp)
+            if json["quote"].nil?
+                system('clear')
+                puts "\n\n\n\n\n\n"
+                puts "          There was a problem with your API call. Error: Ticker no longer valid"
+                gets
+                return [false, resp]
+            else
+                return [true, resp]
+            end
+        end
 
     end
 
 
 end
-

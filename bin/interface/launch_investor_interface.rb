@@ -182,6 +182,9 @@ def launch_investor_interface(invstr)
         when (/^quit$/i)   #logout tested many many times
             logout
             break
+        when (/^exit$/i)   #logout tested many many times
+            logout
+            break
         else
             puts "\n\n\n"
             puts "          I don't recognize that command!"

@@ -139,9 +139,9 @@ gets
 end
 
 def new_company(brkr)
-    
+
     check_state = false
-    
+
     while check_state == false
         system("clear")
         puts "\n\n\n\n\n\n"
@@ -154,10 +154,17 @@ def new_company(brkr)
 
         composite_url = "#{url}#{end_point}#{query_string}token=#{TOKEN}"
 
-        response = Validation.validate_api(composite_url)
-        
-        check_state = response[0]
 
+        if Validation.validate?({ticker: tckr}) && Validation.validate_api(composite_url)[0]
+
+            response = Validation.validate_api(composite_url)
+
+            check_state = response[0]
+        else
+            puts "\n\n\n"
+            puts "          Please enter an alphanumeric ticker symbol."
+            gets
+        end
     end
     new_c = brkr.create_new_company(tckr)
     puts "          PetS now tracks #{new_c.name}"
@@ -230,6 +237,9 @@ def launch_broker_interface(brkr)
         when(/^sell stock$/i)
             sell_stock(brkr)
         when (/^quit$/i)   #logout tested many many times
+            logout
+            break
+        when (/^exit$/i)   #logout tested many many times
             logout
             break
         else

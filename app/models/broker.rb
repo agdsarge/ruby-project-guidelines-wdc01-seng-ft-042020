@@ -33,8 +33,6 @@ class Broker < ActiveRecord::Base
         if response[0]
             json = JSON.parse(response[1])
 
-
-
             json.each do |k, v|
                     value = v["quote"]["latestPrice"]
 
@@ -44,17 +42,24 @@ class Broker < ActiveRecord::Base
             end
 
             return true
-        else 
+        else
             return false
         end
 
     end
 
+    # def stock_valid?(resp)
+    #     if response[1]
+    #         return true #or false
+    #     else
+    #         return
+    #     end
+    # end
+
     def update_stock_price(tckr)
         #return a float with current price
-        
+
         #api
-        
         url = 'https://cloud.iexapis.com/stable'
         end_point = "/stock/#{tckr.downcase}/batch?"
         query_string = "types=quote&"
@@ -62,17 +67,19 @@ class Broker < ActiveRecord::Base
         composite_url = "#{url}#{end_point}#{query_string}token=#{TOKEN}"
 
         response = Validation.validate_api(composite_url)
+        # stock_valid(response)
         #url
         #endpoints
         #querystring => transform some array of companytickers into string separated by commas
 
         #parse with json
 
-        json = JSON.parse(response)
+        json = JSON.parse(response[1])
 
         #pp json["quote"]
 
         return [json["quote"]["companyName"], json["quote"]["latestPrice"]]
+
 
     end
 
